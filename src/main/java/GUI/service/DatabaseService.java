@@ -50,7 +50,8 @@ public class DatabaseService {
     /**
      * Metoda na spustenie prikazu 'INSERT INTO', ktora prida data do tabulky pre mesacny vykaz zo vstupu
      */
-    public void insertData(String date, double hours, String activity, boolean vacation, boolean holiday, boolean doctor, boolean pn, boolean week) {
+    public void insertData(String date, double hours, String activity, boolean vacation,
+                           boolean holiday, boolean doctor, boolean pn, boolean week) {
         String insertSQL = "INSERT INTO " + getTableNameManager(date) + " (" +
                 "date, hours, activity, vacation, holiday, doctor, pn, week" +
                 ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

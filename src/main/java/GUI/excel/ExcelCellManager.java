@@ -1,5 +1,6 @@
 package GUI.excel;
 
+import javafx.scene.text.Text;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
@@ -117,14 +118,33 @@ public class ExcelCellManager {
         cell.setCellStyle(style);
     }
 
-    public void vypocitajVysku(Sheet sheet, int columnIndex, Row row){
+    /**
+     * Metoda vypocita a nastavi potrebnu vysku bunky v pripade viacriadkoveho textu v bunke po zalomeni.
+     */
+    public void calculateTheRowHeight(Sheet sheet, int startColumn, int endColumn, Row row){
         String cellValue = cell.getStringCellValue();
+        int lineCount = (int) Math.ceil((double) cellValue.length() / calculateTheTextWidth(sheet, startColumn, endColumn));
+        row.setHeight((short) (lineCount * (new Text(cellValue).getLayoutBounds().getHeight() * 0.75 * 20)));
+    }
 
-        int columnWidth = sheet.getColumnWidth(columnIndex) / 256;
-        double charWidth = 1.2;
-        int charsPerLine = (int) (columnWidth / charWidth);
-        int lineCount = (int) Math.ceil((double) cellValue.length() / charsPerLine);
+    /**
+     * Metoda vypocita maximalny pocet znakov ktore sa zmestia v jednom riadku do bunky.
+     */
+    public int calculateTheTextWidth(Sheet sheet, int startColumn, int endColumn){
+        int totalWidth = 0;
 
-        row.setHeight((short) (lineCount * 55));
+        for (int col = startColumn; col <= endColumn; col++) {
+            totalWidth += (int) (sheet.getColumnWidth(col) / 256.0);
+        }
+
+        double charWidth = 0.7;
+        return (int) (totalWidth / charWidth);
+    }
+
+    /**
+     * Metoda vrati bunku.
+     */
+    public Cell getCell() {
+        return cell;
     }
 }

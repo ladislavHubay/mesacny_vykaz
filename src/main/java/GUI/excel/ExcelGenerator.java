@@ -36,7 +36,6 @@ public class ExcelGenerator {
 
         sheet.setColumnWidth(0, 12 * 256);
         sheet.setColumnWidth(1, 8 * 256);
-        sheet.setColumnWidth(2, 14 * 256);
 
         writeHeader();
         writeData();
@@ -46,7 +45,7 @@ public class ExcelGenerator {
      * Metoda vytvori a do excelu zapise hlavicku pozadovanej tabulky.
      */
     private void writeHeader(){
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 6));
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 8));
         row = sheet.createRow(0);
 
         for (int i = 0; i < COLUMNS_NAME.length; i++) {
@@ -62,7 +61,7 @@ public class ExcelGenerator {
                 excelCellManager.createBorderLeft(true);
             } else {
                 excelCellManager.createBorderLeft(true);
-                excelCellManager.createOneCell(row, 6);
+                excelCellManager.createOneCell(row, 8);
                 excelCellManager.createBorderRight(false);
                 excelCellManager.addStyleIntoTheCell();
             }
@@ -75,14 +74,12 @@ public class ExcelGenerator {
     }
 
     /**
-     * Metoda vytvori a do excelu zapise data o praci ako je datum, pocet hodin a aktivita.
+     * Metoda vytvori a do excelu zapise data o praci (datum, pocet hodin, aktivita).
      */
     private void writeData(){
         for (int i = 1; i <= rows.size(); i++){
-            sheet.addMergedRegion(new CellRangeAddress(i, i, 2, 6));
+            sheet.addMergedRegion(new CellRangeAddress(i, i, 2, 8));
             row = sheet.createRow(i);
-
-            String freeDay = rows.get(i - 1).get(columns[2]).toString();
 
             for (int j = 0; j < COLUMNS_NAME.length; j++){
                 excelCellManager = new ExcelCellManager(workbook);
@@ -97,31 +94,27 @@ public class ExcelGenerator {
                 } else {
                     excelCellManager.createWrapText(true);
                     excelCellManager.createCenterForCell(false);
-                    excelCellManager.createOneCell(row, 6);
+                    excelCellManager.createOneCell(row, 8);
                     excelCellManager.createBorderRight(false);
                     excelCellManager.addStyleIntoTheCell();
                 }
 
-                // Upravit kontrolu (nesmie byt podla nazvu aktivity -sobota, nedela, sviatok).
-                // V pripade ak sa pracuje cez volny den tak vznika problem vyfarbenia buniek.
-
-                if(freeDay.equalsIgnoreCase("sobota") ||
-                        freeDay.equalsIgnoreCase("nedela") ||
-                        freeDay.equalsIgnoreCase("sviatok")){
+                if(Integer.parseInt(rows.get(i - 1).get("week").toString()) == 1 ||
+                Integer.parseInt(rows.get(i - 1).get("holiday").toString()) == 1){
                     excelCellManager.createColorForCell(112, 173, 71);
                 }
 
                 createCellAndWriteTextAndAddStyle(j, rows.get(i - 1).get(columns[j]).toString());
 
-                // vyriesit vysku bunky v pripade viacriadkoveho vypisu (zalomenie textu)
-
-                //if(j == 2){
-                //    excelCellManager.vypocitajVysku(sheet, 2, row);
-                //}
-
                 if(i == rows.size()){
                     excelCellManager.createBorderBottom(false);
                 }
+            }
+
+            if(excelCellManager.getCell().getStringCellValue().length() >= excelCellManager.calculateTheTextWidth(sheet, 2, 8)){
+                excelCellManager.calculateTheRowHeight(sheet, 2, 8, row);
+            } else {
+                row.setHeight((short) 300);
             }
         }
     }
@@ -164,22 +157,22 @@ public class ExcelGenerator {
      * pocte cerpanych dni dovolenky a pocte zostavajucej dovolenky.
      */
     public void writeSumOfWorkDaysAndVacationDays(int workingDays, double vacationDays, double remainingVacationDays){
-        sheet.addMergedRegion(new CellRangeAddress(rows.size() + 4, rows.size() + 4, 0, 2));
+        sheet.addMergedRegion(new CellRangeAddress(rows.size() + 4, rows.size() + 4, 0, 3));
         row = sheet.createRow(rows.size() + 4);
         excelCellManager = new ExcelCellManager(workbook);
         createCellAndWriteTextAndAddStyle(0, "Pocet pracovnych dni:");
-        createCellAndWriteTextAndAddStyle(3, String.valueOf(workingDays));
+        createCellAndWriteTextAndAddStyle(4, String.valueOf(workingDays));
 
-        sheet.addMergedRegion(new CellRangeAddress(rows.size() + 5, rows.size() + 5, 0, 2));
+        sheet.addMergedRegion(new CellRangeAddress(rows.size() + 5, rows.size() + 5, 0, 3));
         row = sheet.createRow(rows.size() + 5);
         excelCellManager = new ExcelCellManager(workbook);
         createCellAndWriteTextAndAddStyle(0, "Pocet cerpanych dni dovolenky:");
-        createCellAndWriteTextAndAddStyle(3, String.valueOf(vacationDays));
+        createCellAndWriteTextAndAddStyle(4, String.valueOf(vacationDays));
 
-        sheet.addMergedRegion(new CellRangeAddress(rows.size() + 6, rows.size() + 6, 0, 2));
+        sheet.addMergedRegion(new CellRangeAddress(rows.size() + 6, rows.size() + 6, 0, 3));
         row = sheet.createRow(rows.size() + 6);
         createCellAndWriteTextAndAddStyle(0, "Pocet zostavajucich dni dovolenky:");
-        createCellAndWriteTextAndAddStyle(3, String.valueOf(remainingVacationDays));
+        createCellAndWriteTextAndAddStyle(4, String.valueOf(remainingVacationDays));
 
         saveFile();
     }

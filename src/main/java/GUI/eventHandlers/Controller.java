@@ -104,7 +104,6 @@ public class Controller {
     private void addButtonAction(Pane root, VBox mainContainer) {
         addButton = components.creatButtons("pridaj cinnost", 520, 70, root);
         addButton.setOnAction(e -> {
-
             LocalDate date = dateValidate();
             if(date != null){
                 String hours = numberValidate(components.textAreaHours.getText());
@@ -141,23 +140,21 @@ public class Controller {
 
 
     /**
-     * Metoda vytvori yabulku pre konkretny mesiac a vlozi vsetky sviatky a vikendy.
+     * Metoda vytvori tabulku pre konkretny mesiac a vlozi vsetky sviatky a vikendy.
      */
     private void checkWeekAndHoliday(LocalDate date){
         dbService.createTable(date.format(formatter));
         HolidayAndVacationManager holidayAndVacationManager = new HolidayAndVacationManager(date);
 
         while (holidayAndVacationManager.dayCounter()) {
+            String actualDate = holidayAndVacationManager.getActualDate().format(formatter);
             LocalDate holidayDate = holidayAndVacationManager.isHoliday();
-            if (holidayDate != null) {
-                dbService.insertData(holidayDate.format(formatter),
-                        0, holiday, false, true, false, false, false);
-            }
-
             String weekDate = holidayAndVacationManager.isWeek();
-            if (weekDate != null && holidayDate == null) {
-                dbService.insertData(holidayAndVacationManager.getActualDate().format(formatter),
-                        0, weekDate, false, false, false, false, true);
+
+            if (holidayDate != null) {
+                dbService.insertData(actualDate,0, holiday, false, true, false, false, false);
+            } else if (weekDate != null) {
+                dbService.insertData(actualDate,0, weekDate, false, false, false, false, true);
             }
         }
     }
@@ -246,7 +243,6 @@ public class Controller {
      */
     public void deleteDatabaseAndResultInfo(String patch) {
         windowCreate windowCreate = new windowCreate(250, 100, "info");
-
         String text;
 
         if(new File(patch).delete()){
@@ -480,7 +476,6 @@ public class Controller {
      * vyvolanie vyskakovacieho okna na upozornenie nespravneho formatu vstupu pre hodiny (odpracovany cas).
      */
     private String numberValidate(String value){
-        // V pripade ziadneho alebo prazdneho vstupu sa usetri vykon ktory by sa pouzil pri try-catch
         if(value == null || value.isEmpty()){
             showAlertMessage("Cas nie je v pozadovanom formate");
             return null;

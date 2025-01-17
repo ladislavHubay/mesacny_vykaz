@@ -44,7 +44,6 @@ public class HolidayAndVacationManager {
                 return actualDate;
             }
         }
-
         return null;
     }
 
@@ -64,7 +63,6 @@ public class HolidayAndVacationManager {
             returnedDate = null;
         }
         actualDate = actualDate.plusDays(1);
-
         return returnedDate;
     }
 
@@ -77,9 +75,7 @@ public class HolidayAndVacationManager {
             if(isHoliday() == null && isWeek() == null){
                 workDays++;
             }
-            actualDate = actualDate.plusDays(1);
         }
-
         return workDays;
     }
 

@@ -22,7 +22,7 @@ public class HolidayAndAbsenceCalculator {
     }
 
     /**
-     * Metoda spocita pocet hodin dovolenky, sviatku, lekarskeho vysetrenia a PN.
+     * Metoda spocita pocet hodin dovolenky, lekarskeho vysetrenia a PN.
      */
     private void calculateTheOutOfWorkTime(List<Map<String, Object>> rows){
         for (Map<String, Object> row : rows){
@@ -39,7 +39,7 @@ public class HolidayAndAbsenceCalculator {
     }
 
     /**
-     * Metoda zabespeci aby sa mimopracovne cinnosti (dovolenka, sviatok, lekar, PN)
+     * Metoda zabespeci aby sa mimopracovne cinnosti (dovolenka, lekar, PN)
      * spocitali iba v dany rok a iba po dany mesiac.
      */
     public void checkTheDate(List<Map<String, Object>> rows){
@@ -58,7 +58,7 @@ public class HolidayAndAbsenceCalculator {
             if((int)row.get("vacation") == 0 &&
             (int)row.get("doctor") == 0 &&
             (int)row.get("pn") == 0){
-                hours = hours + (double) row.get("hours");
+                hours = hours + (double)row.get("hours");
             }
         }
     }
