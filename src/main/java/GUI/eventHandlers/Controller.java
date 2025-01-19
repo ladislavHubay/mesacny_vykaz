@@ -21,31 +21,31 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class Controller {
-    Components components;
-    DatabaseService dbService;
-    String vacation = "Dovolenka";
-    String holiday = "Sviatok";
-    String doctor = "Vysetrenie u lekara";
-    String sick = "PN";
-    String userName;
-    String salaryString;
-    String entitledVacationDaysString;
-    TextArea textAreaEntitledVacationDays;
-    TextArea textAreaSalary;
-    double entitledVacationDays;
-    double salary;
-    Stage mainStage;
-    DateTimeFormatter formatter;
-    Button doctorButton;
-    Button vacationButton;
-    Button pnButton;
-    Button addButton;
-    Button deleteButton;
-    Button exitButton;
-    Button printButton;
-    Button updateButton;
-    String selectedFile;
-    List<String> allTableNames;
+    private final Components components;
+    private final DatabaseService dbService;
+    private final String vacation = "Dovolenka";
+    private final String holiday = "Sviatok";
+    private final String doctor = "Vysetrenie u lekara";
+    private final String sick = "PN";
+    private String userName;
+    private String salaryString;
+    private String entitledVacationDaysString;
+    private TextArea textAreaEntitledVacationDays;
+    private TextArea textAreaSalary;
+    private double entitledVacationDays;
+    private double salary;
+    private Stage mainStage;
+    private final DateTimeFormatter formatter;
+    private Button doctorButton;
+    private Button vacationButton;
+    private Button pnButton;
+    private Button addButton;
+    private Button deleteButton;
+    private Button exitButton;
+    private Button printButton;
+    private Button updateButton;
+    private String selectedFile;
+    private List<String> allTableNames;
     private double xOffset = 0;
     private double yOffset = 0;
 
@@ -548,6 +548,10 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Metoda vypne ram grafickeho okna vratane moznosti minimalizovat, maximalizovat a zrusit.
+     * Zaroven umoznuje posun grafickeho okno pomocou mysi.
+     */
     private void moveWindow(Pane root){
         mainStage.initStyle(StageStyle.UNDECORATED);
         root.setOnMousePressed(event -> {

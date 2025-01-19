@@ -58,7 +58,7 @@ public class TextAndButtonPanel {
     private void displayText(String displayText, int x, int prefWidth) {
         textFlow = new TextFlow(new Text(displayText));
         textFlow.setLayoutX(x);
-        textFlow.setLayoutY(10);
+        textFlow.setLayoutY(25);
         textFlow.setPrefWidth(prefWidth);
 
         root.getChildren().add(textFlow);
@@ -70,8 +70,8 @@ public class TextAndButtonPanel {
     private void createDeleteButton() {
         button = new Button("X");
         button.setLayoutX(595);
-        button.setLayoutY(10);
-        button.setPrefSize(25, 25);
+        button.setLayoutY(20);
+        button.setPrefSize(20, 20);
 
         button.setOnAction(f -> {
             mainContainer.getChildren().remove(root);

@@ -71,20 +71,6 @@ public class HolidayAndAbsenceCalculator {
     }
 
     /**
-     * Metoda vrati pocet hodin u lekara.
-     */
-    public double getDoctorDays() {
-        return doctorDays;
-    }
-
-    /**
-     * Metoda vrati pocet hodin na PN.
-     */
-    public double getSickDays() {
-        return sickDays;
-    }
-
-    /**
      * Metoda vrati pocet celkovych odpracovanych hodin za dany mesiac.
      */
     public double getHours() {
