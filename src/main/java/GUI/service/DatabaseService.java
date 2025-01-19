@@ -184,6 +184,7 @@ public class DatabaseService {
         try (Connection connection = connect();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, value);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
