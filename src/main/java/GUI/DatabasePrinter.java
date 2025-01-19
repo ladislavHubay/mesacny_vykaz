@@ -41,8 +41,8 @@ public class DatabasePrinter {
     }
 
     public static void main(String[] args) {
-        printTableContents("meno_vykaz_1_2025"); // Názov tabuľky, ktorú chceš vypísať
-        // printTableContents("user"); // Názov tabuľky, ktorú chceš vypísať
+        //printTableContents("meno_vykaz_1_2025"); // Názov tabuľky, ktorú chceš vypísať
+        printTableContents("user"); // Názov tabuľky, ktorú chceš vypísať
     }
 
     public static String medzery(String text){
