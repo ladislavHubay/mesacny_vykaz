@@ -1,7 +1,7 @@
 package GUI.eventHandlers;
 
 import GUI.components.Components;
-import GUI.components.windowCreate;
+import GUI.components.WindowCreate;
 import GUI.excel.ExcelGenerator;
 import GUI.service.DatabaseService;
 import javafx.scene.Scene;
@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -45,6 +46,8 @@ public class Controller {
     Button updateButton;
     String selectedFile;
     List<String> allTableNames;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     /**
      * Konstruktor vytvara objekty DatabaseService, Components a spusti kontrolu ci uz bol uzivatel prihlaseny alebo nie
@@ -77,8 +80,12 @@ public class Controller {
             mainContainer.getChildren().add(root);
 
             Scene scene = new Scene(mainContainer, 640, 800);
+
+            moveWindow(root);
+
             mainStage.setTitle("Mesačný výkaz");
             mainStage.setResizable(false);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
             mainStage.setScene(scene);
             mainStage.show();
         }
@@ -102,7 +109,7 @@ public class Controller {
      * Vytvara a riadi reakciu buttonu na pridanie jedneho riadka udajov zo vstupu do casti zobrazujuce suhrn.
      */
     private void addButtonAction(Pane root, VBox mainContainer) {
-        addButton = components.creatButtons("pridaj cinnost", 520, 70, root);
+        addButton = components.creatButtons("pridaj", 520, 70, root);
         addButton.setOnAction(e -> {
             LocalDate date = dateValidate();
             if(date != null){
@@ -242,7 +249,7 @@ public class Controller {
      * Vytvara vyskakovacie okno s informaciou o uspesnom / neuspeson vymazani databazi + zatvori aplikaciu.
      */
     public void deleteDatabaseAndResultInfo(String patch) {
-        windowCreate windowCreate = new windowCreate(250, 100, "info");
+        WindowCreate windowCreate = new WindowCreate(250, 100, "info");
         String text;
 
         if(new File(patch).delete()){
@@ -263,7 +270,7 @@ public class Controller {
      * Vytvara vyskakovacie okno na upozornenie ci chce uzivatel skutocne vymazat databazu.
      */
     public void showDeleteConfirmation(String patch) {
-        windowCreate windowCreate = new windowCreate(250, 100, "info");
+        WindowCreate windowCreate = new WindowCreate(250, 100, "info");
 
         String text = "Skutocne chces vymazat databazu?";
 
@@ -287,7 +294,7 @@ public class Controller {
      * Po vlozeni priezviska sa pri dalsich spusteniach aplikacie uz neobrazi poziadavka na priezvisko.
      */
     public void firstInputOfLastName() {
-        windowCreate windowCreate = new windowCreate(300, 270, "User name");
+        WindowCreate windowCreate = new WindowCreate(300, 270, "User name");
 
         components.createInfoText(windowCreate.getRoot(), "Zadaj svoje priezvisko:", 20, 5, 240);
         TextArea textAreaUserName = components.createTextAreaForPopupWindow(windowCreate.getRoot(), 260, 30, 20, 30, "");
@@ -332,7 +339,7 @@ public class Controller {
      */
     private void showAlertMessage(String text) {
         buttonsEnabled(true);
-        windowCreate windowCreate = new windowCreate(250, 100, "info");
+        WindowCreate windowCreate = new WindowCreate(250, 100, "info");
 
         components.createInfoText(windowCreate.getRoot(), text, calculateTextCordinateX(text, 250), 10, 240);
         components.creatButtons("OK", 75, 45, windowCreate.getRoot()).setOnAction(e -> {
@@ -348,7 +355,7 @@ public class Controller {
      */
     private void showUpdateWindow() {
         buttonsEnabled(true);
-        windowCreate windowCreate = new windowCreate(250, 220, "update");
+        WindowCreate windowCreate = new WindowCreate(250, 220, "update");
 
         components.createInfoText(windowCreate.getRoot(), "Aktualny pocet dni dovolenky: " +
                 dbService.getUserData("vacation"), 20, 10, 240);
@@ -394,7 +401,7 @@ public class Controller {
      */
     private void choiceFileForPrint() {
         buttonsEnabled(true);
-        windowCreate windowCreate = new windowCreate(250, 100, "print");
+        WindowCreate windowCreate = new WindowCreate(250, 100, "print");
 
         if(isListNotEmpty(windowCreate.getRoot())){
             return;
@@ -539,5 +546,18 @@ public class Controller {
         }
         choice(root, allTableNames);
         return false;
+    }
+
+    private void moveWindow(Pane root){
+        mainStage.initStyle(StageStyle.UNDECORATED);
+        root.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        root.setOnMouseDragged(event -> {
+            mainStage.setX(event.getScreenX() - xOffset);
+            mainStage.setY(event.getScreenY() - yOffset);
+        });
     }
 }

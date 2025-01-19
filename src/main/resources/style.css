@@ -1,0 +1,18 @@
+.root {
+    -fx-border-color: #766d6d;
+    -fx-background-color: rgb(238, 223, 223);
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.button {
+    -fx-font-size: 14;
+    -fx-background-color: #e6e0eb;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 3, 3);
+}
+
+.text-area {
+    -fx-font-size: 10pt;
+    -fx-border-color: #0b5959;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 3, 3);
+}
