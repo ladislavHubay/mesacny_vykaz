@@ -38,10 +38,10 @@ public class HolidayAndVacationManager {
     /**
      * Metoda kontroluje ci je aktualny datum sviatok. Ak ano vrati datum. Ak nie vrati null.
      */
-    public LocalDate isHoliday(){
+    public String isHoliday(){
         for (Holiday holiday : holidays) {
             if (holiday.getDate().equals(actualDate)) {
-                return actualDate;
+                return "Sviatok";
             }
         }
         return null;
@@ -72,7 +72,11 @@ public class HolidayAndVacationManager {
     public int workingDays(){
         int workDays = 0;
         for (int day = 1; day <= month.lengthOfMonth(); day++) {
-            if(isHoliday() == null && isWeek() == null){
+
+            String holiday = isHoliday();
+            String weekend = isWeek();
+
+            if(holiday == null && weekend == null){
                 workDays++;
             }
         }

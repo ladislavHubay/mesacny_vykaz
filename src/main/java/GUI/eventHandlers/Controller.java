@@ -145,7 +145,6 @@ public class Controller {
         });
     }
 
-
     /**
      * Metoda vytvori tabulku pre konkretny mesiac a vlozi vsetky sviatky a vikendy.
      */
@@ -155,13 +154,13 @@ public class Controller {
 
         while (holidayAndVacationManager.dayCounter()) {
             String actualDate = holidayAndVacationManager.getActualDate().format(formatter);
-            LocalDate holidayDate = holidayAndVacationManager.isHoliday();
-            String weekDate = holidayAndVacationManager.isWeek();
+            String holidayDate = holidayAndVacationManager.isHoliday();
+            String weekend = holidayAndVacationManager.isWeek();
 
             if (holidayDate != null) {
-                dbService.insertData(actualDate,0, holiday, false, true, false, false, false);
-            } else if (weekDate != null) {
-                dbService.insertData(actualDate,0, weekDate, false, false, false, false, true);
+                dbService.insertData(actualDate,0, holidayDate, false, true, false, false, false);
+            } else if (weekend != null) {
+                dbService.insertData(actualDate,0, weekend, false, false, false, false, true);
             }
         }
     }
